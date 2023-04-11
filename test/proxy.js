@@ -26,8 +26,27 @@ describe("Proxy", async function () {
             proxy.address // The deployed contract address
         );
 
-        await proxyContract.setNumber(20);
+        // sets storage vars in logic contract.
+        await logic.setNumber(30); 
+        console.log("Base: ", (await logic.getNumber()).toString());
+        expect(await logic.getNumber()).to.eq(30);
+    
+        
+        const myProxy = new ethers.Contract(
+            proxy.address,       
+            ["function setNumber(uint _number) external", 
+            "function getNumber() external view returns(uint)"],
+            owner
+        );
 
+        await myProxy.setNumber(100);
+        console.log("My Proxy: ", (await myProxy.getNumber()).toString());
+        expect(await proxyContract.getNumber()).to.eq(100);
+        expect(await myProxy.getNumber()).to.eq(100);
+
+        
+        await proxyContract.setNumber(20);
         expect(await proxyContract.getNumber()).to.eq(20);
+        expect(await myProxy.getNumber()).to.eq(20);
     });
 });
