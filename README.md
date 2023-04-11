@@ -1,4 +1,4 @@
-# Basic Sample Hardhat Project
+# Simple Swap and Proxy
 
 Copy the .env example and fill the node API-Key
 
